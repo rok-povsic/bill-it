@@ -1,8 +1,8 @@
 # Billing Software (WIP)
 
-## Run:
+## Run
 
 ```bash
-./latexdockercmd.sh xelatex main.tex
+python3 bill-it.py
 ```
 
