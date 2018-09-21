@@ -1,35 +1,73 @@
-\documentclass[11pt,twoside,a4paper]{article}
-\usepackage{fp}
-\usepackage{booktabs}
-\usepackage{ragged2e}
-\usepackage{longtable}
-\newcounter{cnt}
-\setcounter{cnt}{0}
-\def\inc{\stepcounter{cnt}\thecnt}
-\gdef\TotalHT{0}
-\newcommand{\product}[3]{%
-\inc &#1  &#2   &#3  &\FPmul\temp{#2}{#3}\FPround\temp{\temp}{2}\temp 
-%% Totalize
-\FPadd\total{\TotalHT}{\temp}%
-\FPround\total{\total}{2}%
-\global\let\TotalHT\total%
-\\ }
-\newcommand{\totalttc}{
-   \TotalHT  }
-\begin{document}
-\RaggedRight
-\begin{longtable}{cp{4.2cm}rrr}
-\toprule
-Item   &Description & Price & Qty & Total\\
-\midrule
-    \product{Computer peripherals}{1000.00}{1}
-    \product{Harddisk 2000E}{2000}{1}
-    \product{The \TeX book}{100.00}{100}
-    \product{Product Four}{5000.00}{1}
-    \product{Product Five}{5000.00}{2}
-\midrule
-    &&&& Total \totalttc\\
-\bottomrule
-\end{longtable}
-\end{document}
+\documentclass[letterpaper]{dapper-invoice}
+%\documentclass[letterpaper,currency=dollar]{dapper-invoice}
+%\documentclass[letterpaper,currency=euro]{dapper-invoice}
+%\documentclass[letterpaper,currency=pound]{dapper-invoice}
 
+\newcommand{\invoiceNo}{101}
+\newcommand{\balance}{137.50}
+\newcommand{\duein}{15}% days
+
+\newcommand{\me}{Your~Name}
+\newcommand{\clientName}{Sample~Client}
+
+\setmetadata{\me}{Your Biz}{\invoiceNo}{\clientName}
+
+\defaultfontfeatures{ Path = ./Fonts/ }
+\usepackage{fontawesome}
+
+\begin{document}
+
+\newfontface\mainLightItalic{OpenSans-LightItalic}
+\makeheader{Your\ \mainLightItalic Biz}{\invoiceNo}
+
+\twocolumnlayout{
+    \begin{infoSection}
+        \infoBox{Client}{\clientName \\
+                         123 Street Address \\
+                         City, State 55555 }
+        \infoBox{Project}{\#123.456}
+        \infoBox{Contact}{Jane Smith}
+        \infoSub{\faMobilePhone}{\small\slshape +1~(555)~555-5555}
+        \noalign{\addvspace{8ex}}
+        \infoBox{}{
+            {\large\raisebox{.55\height}\currencysym\huge\formatcurrency{\balance} \arrowbase} \\
+            {\small\color{subduedColor} due \duedate{\duein}}
+        }
+    \end{infoSection}
+}{
+    \begin{infoSection}
+        \infoBox{\arrowtarget Payable To}{
+            \me \\
+            1234 Sycamore Ave \\
+            Blacksburg, VA 24060
+        }
+        \infoSub{\faMobilePhone}{\small\slshape +1~(555)~555-5555}
+        \infoSub{\tiny\faEnvelope}{\small\slshape \emaillink{you@example.com}}
+    \end{infoSection}
+}
+
+\drawarrow
+
+\addvspace{4ex}
+
+\begin{hoursItemizationWithProject}
+
+    \lineitemp{2015/4/11}{2}{50}{Invoice}{
+        \item Discussed requirements with client}
+
+    \lineitemp{2015/4/11}{1.25}{50}{Invoice}{
+        \item Wrote Invoice in LaTeX}
+
+    \lineitemp{2015/4/11}{0.5}{50}{Invoice}{
+        \item Packaged Invoice in .cls file}
+
+    \beginsummary
+
+    \summaryline{Total}{\currencysym\formatcurrency{\InvoiceTotal}}
+
+    \summaryline{Paid}{\currencysym\formatcurrency{50}}
+    \summaryline{Balance Due}{\currencysym\formatcurrency{\balance}} % not really any math support (yet)
+
+\end{hoursItemizationWithProject}
+
+\end{document}
