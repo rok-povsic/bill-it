@@ -1,4 +1,8 @@
-# Billing Software
+# Billing Software (WIP)
 
-## WIP
+## Run:
+
+```bash
+./latexdockercmd.sh xelatex main.tex
+```
 
